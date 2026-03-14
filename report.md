@@ -86,5 +86,39 @@ The SHAP analysis for feature importance:<br>
 | **XGBoost** | ![figure.8](/XGBoost_shap_beeswarm.png) | ![figure.9](/XGBoost_shap_bar.png) |
 ## DeepChem GNN model
 ### Dataset structure
+```
+[File ID, Temperature (K), G, Pressure (bar), theta]
+dataset shape: 1760x5
+```
 ### Input features
+```
+data[0] structure:
+Node Feats: (132, 133)
+Edge Index: (2, 348)
+Edge Feats: (348, 14)
+Global Feats: (19) # T,P,G (or without G),1/T,lnP+15*TDA
+y: [0.513297]
+```
+### Model structure
+```
+num_epochs = 500
+model = dc.models.torch_models.DMPNNModel(
+    mode='regression',
+    n_tasks=1,
+    batch_size=64,
+    global_features_size=19 (or 20),  #T,P,G (or without G),1/T,lnP+15*TDA
+    enc_hidden=32,  # Size of hidden layer in the encoder layer
+    ffn_hidden=32,  # Size of hidden layer in the feed-forward network layer
+    ffn_layers=3,    # Number of layers in the feed-forward network layer
+    # learning_rate=1e-4,
+    ffn_dropout_p = 0.3,
+    learning_rate=dc.models.optimizers.ExponentialDecay(5e-4, 0.9, 1000)
+)
+```
 ### Metrics
+| with $\Delta G$ | without $\Delta G$ |
+| --- | --- |
+|![figure10](/TDA%20with%20G/learning_curve.png) | ![figure11](/TDA%20without%20G/learning_curve.png)|
+|![figure12](/TDA%20with%20G/result.png)|![figure13](/TDA%20without%20G/result.png)|
+|![figure14](/TDA%20with%20G/shap_importance_bar.png)|![figure15](/TDA%20without%20G/shap_importance_bar.png)|
+|![figure16](/TDA%20with%20G/shap_summary.png)| ![figure17](/TDA%20without%20G/shap_summary.png)|
