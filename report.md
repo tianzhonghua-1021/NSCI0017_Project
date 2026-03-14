@@ -74,10 +74,22 @@ grid_rf = GridSearchCV(rf, rf_param_grid, cv=5)
 grid_svr = GridSearchCV(svr, svr_param_grid, cv=5)
 grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=5)
 ```
-### Metrics
+### Metrics (without $\Delta G$)
 The comparison of scatter plots with 4 ML models:
 ![figure.1](/model_comparison.png)
-
+The SHAP analysis for feature importance:
+**Random Forest**
+![figure.2](/Random_Forest_shap_beeswarm.png)
+![figure.3](/Random_Forest_shap_bar.png)
+**Linear Regression**
+![figure.4](/Linear_Regression_shap_beeswarm.png)
+![figure.5](/Linear_Regression_shap_bar.png)
+**SVR**
+![figure.6](/SVR_shap_beeswarm.png)
+![figure.7](/SVR_shap_bar.png)
+**XGBoost**
+![figure.8](/XGBoost_shap_beeswarm.png)
+![figure.9](/XGBoost_shap_bar.png)
 ## DeepChem GNN model
 ### Dataset structure
 ### Input features
