@@ -18,7 +18,7 @@ def run_shap_analysis(model, X_test_scaled, feature_names, model_name="Model"):
     X_df = pd.DataFrame(X_test_scaled, columns=feature_names)
     print(f"Calculating {model_name} for SHAP values")
     
-    if "RandomForest" in str(type(model)):
+    if "RandomForest" in str(type(model)) or "XGBRegressor" in str(type(model)):
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(X_df)
     else:
@@ -41,8 +41,6 @@ def run_shap_analysis(model, X_test_scaled, feature_names, model_name="Model"):
     return shap_values
 
 # Pearson correlation defination
-
-
 def plot_correlation_matrix(df, model_name="Dataset"):
     corr_matrix = df.corr() 
     plt.figure(figsize=(15, 15), dpi=300)
@@ -62,6 +60,16 @@ def plot_correlation_matrix(df, model_name="Dataset"):
     plt.savefig(f'{model_name}_correlation_matrix.png', bbox_inches='tight')
     print(f"Correlation matrix saved as {model_name}_correlation_matrix.png")
 
+# Feature cleaning process (with Pearson threshold)
+def remove_high_correlation_features(X, threshold=0.9):
+    corr_matrix = X.corr().abs()
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+    to_drop = [column for column in upper.columns if any(upper[column] > threshold)]
+    
+    print(f"There are {len(to_drop)} features (r > {threshold}):")
+    print(to_drop)
+    X_dropped = X.drop(columns=to_drop)
+    return X_dropped, to_drop
 
 csv_dir = r"D:\UCL Courses\NSCI0016 Literature Report\dataset and models\deepchem\0314analysis\dataset_full_feat.csv"
 colnames = ['FileID', 'Temperature', 'E', 'G', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum', 'theta']
@@ -78,7 +86,12 @@ analysis_df = X.copy()
 analysis_df['theta'] = y 
 plot_correlation_matrix(analysis_df, model_name="Feature_Analysis")
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True)
+X, dropped_cols = remove_high_correlation_features(X, threshold=0.9)
+feature_names = X.columns.tolist()
+# divide the label into bins
+y_bins = pd.cut(y, bins=5, labels=False)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
+
 scaler_X = StandardScaler()
 X_train_scaled = scaler_X.fit_transform(X_train)
 X_test_scaled = scaler_X.transform(X_test)

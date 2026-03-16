@@ -122,3 +122,8 @@ model = dc.models.torch_models.DMPNNModel(
 |![figure12](/TDA%20with%20G/result.png)|![figure13](/TDA%20without%20G/result.png)|
 |![figure14](/TDA%20with%20G/shap_importance_bar.png)|![figure15](/TDA%20without%20G/shap_importance_bar.png)|
 |![figure16](/TDA%20with%20G/shap_summary.png)| ![figure17](/TDA%20without%20G/shap_summary.png)|
+
+
+## Feature analysis
+### Pearson correlation plot
+![figure17](/Feature_Analysis_correlation_matrix.png)
