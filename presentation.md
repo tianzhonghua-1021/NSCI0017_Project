@@ -46,6 +46,34 @@ shape is: (1760, 31)
 X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
 ```
+### Pearson correlation analysis
+![figure17](/Feature_Analysis_correlation_matrix.png)
+Based on the plot of Pearson correlation, the next experiment is to remove the features which have the highest correlationship with others (threshold of coefficient is 0.9)
+```
+def remove_high_correlation_features(X, threshold=0.9):
+    corr_matrix = X.corr().abs()
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+    to_drop = [column for column in upper.columns if any(upper[column] > threshold)]
+    
+    print(f"There are {len(to_drop)} features (r > {threshold}):")
+    print(to_drop)
+    X_dropped = X.drop(columns=to_drop)
+    return X_dropped, to_drop
+```
+And the output following the drop of features
+```
+There are 8 features (r > 0.9):
+['m', 'diameter', 'TiType_none', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum']
+```
+**Drop the high corelated features**
+```
+X, dropped_cols = remove_high_correlation_features(X, threshold=0.9)
+```
+**Stratify the dataset based on label ($\theta$)**
+```
+y_bins = pd.cut(y, bins=5, labels=False)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
+```
 ### Model selection
 ```
 rf = RandomForestRegressor(random_state=42)
@@ -124,32 +152,3 @@ model = dc.models.torch_models.DMPNNModel(
 |![figure16](/TDA%20with%20G/shap_summary.png)| ![figure17](/TDA%20without%20G/shap_summary.png)|
 
 
-## Feature analysis
-### Pearson correlation plot
-![figure17](/Feature_Analysis_correlation_matrix.png)
-Based on the plot of Pearson correlation, the next experiment is to remove the features which have the highest correlationship with others (threshold of coefficient is 0.9)
-```
-def remove_high_correlation_features(X, threshold=0.9):
-    corr_matrix = X.corr().abs()
-    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
-    to_drop = [column for column in upper.columns if any(upper[column] > threshold)]
-    
-    print(f"There are {len(to_drop)} features (r > {threshold}):")
-    print(to_drop)
-    X_dropped = X.drop(columns=to_drop)
-    return X_dropped, to_drop
-```
-And the output following the drop of features
-```
-There are 8 features (r > 0.9):
-['m', 'diameter', 'TiType_none', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum']
-```
-**Drop the high corelated features**
-```
-X, dropped_cols = remove_high_correlation_features(X, threshold=0.9)
-```
-**Stratify the dataset based on label ($\theta$)**
-```
-y_bins = pd.cut(y, bins=5, labels=False)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
-```
