@@ -9,6 +9,7 @@ from xgboost import XGBRegressor # XGBoost
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 
@@ -39,6 +40,27 @@ def run_shap_analysis(model, X_test_scaled, feature_names, model_name="Model"):
     plt.savefig(f'{model_name}_shap_bar.png', bbox_inches='tight')
     return shap_values
 
+# Pearson correlation defination
+
+
+def plot_correlation_matrix(df, model_name="Dataset"):
+    corr_matrix = df.corr() 
+    plt.figure(figsize=(15, 15), dpi=300)
+    mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+    sns.heatmap(
+        corr_matrix, 
+        mask=None, 
+        annot=True, 
+        cmap='coolwarm', 
+        fmt=".2f", 
+        linewidths=0.2,
+        annot_kws={"size": 4}, 
+        cbar_kws={'shrink': .4}
+    )
+    plt.title(f"Pearson Correlation Matrix: {model_name}")
+    plt.tight_layout()
+    plt.savefig(f'{model_name}_correlation_matrix.png', bbox_inches='tight')
+    print(f"Correlation matrix saved as {model_name}_correlation_matrix.png")
 
 
 csv_dir = r"D:\UCL Courses\NSCI0016 Literature Report\dataset and models\deepchem\0314analysis\dataset_full_feat.csv"
@@ -50,6 +72,11 @@ df = pd.get_dummies(df)
 # data splitting (change for "with G" and "without G")
 X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
+
+# Pearson analysis
+analysis_df = X.copy()
+analysis_df['theta'] = y 
+plot_correlation_matrix(analysis_df, model_name="Feature_Analysis")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True)
 scaler_X = StandardScaler()
