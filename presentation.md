@@ -42,6 +42,12 @@ colnames = [
 shape is: (1760, 31)
 ```
 ### Input features
+**with $\Delta G$ version**
+```
+X = df.drop(['E', 'theta','FileID'], axis=1)
+y = df['theta']
+```
+**without $\Delta G$ version**
 ```
 X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
@@ -124,6 +130,18 @@ The SHAP analysis for feature importance:<br>
 | **LR** | ![figure.4](/MLs_without_G/Linear_Regression_shap_beeswarm.png) | ![figure.5](/MLs_without_G/Linear_Regression_shap_bar.png) |
 | **SVR** | ![figure.6](/MLs_without_G/SVR_shap_beeswarm.png) | ![figure.7](/MLs_without_G/SVR_shap_bar.png) |
 | **XGBoost** | ![figure.8](/MLs_without_G/XGBoost_shap_beeswarm.png) | ![figure.9](/MLs_without_G/XGBoost_shap_bar.png) |
+
+### Metrics (file id split without $\Delta G$)
+The comparison of scatter plots with 4 ML models:
+![figure.1](/MLs_fileid/model_comparison.png)
+The SHAP analysis for feature importance:<br>
+| <div style="width:50px">Model</div> | Beeswarm | Bar |
+| --- | --- | --- |
+| **RF** |![figure.2](/MLs_fileid/Random_Forest_shap_beeswarm.png)|![figure.3](/MLs_without_G/Random_Forest_shap_bar.png)|
+| **LR** | ![figure.4](/MLs_fileid/Linear_Regression_shap_beeswarm.png) | ![figure.5](/MLs_fileid/Linear_Regression_shap_bar.png) |
+| **SVR** | ![figure.6](/MLs_fileid/SVR_shap_beeswarm.png) | ![figure.7](/MLs_fileid/SVR_shap_bar.png) |
+| **XGBoost** | ![figure.8](/MLs_fileid/XGBoost_shap_beeswarm.png) | ![figure.9](/MLs_fileid/XGBoost_shap_bar.png) |
+
 ## DeepChem GNN model
 ### Dataset structure
 ```
@@ -163,4 +181,6 @@ model = dc.models.torch_models.DMPNNModel(
 |![figure14](/TDA%20with%20G/shap_importance_bar.png)|![figure15](/TDA%20without%20G/shap_importance_bar.png)|
 |![figure16](/TDA%20with%20G/shap_summary.png)| ![figure17](/TDA%20without%20G/shap_summary.png)|
 
-
+## Discussion
+- TDA descriptors are efficient to capture the structural information
+- The scaffold is important for diversity of CNTs
