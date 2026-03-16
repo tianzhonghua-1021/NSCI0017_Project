@@ -47,7 +47,7 @@ X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
 ```
 ### Pearson correlation analysis
-![figure17](/Feature_Analysis_correlation_matrix.png)
+![figure17](/MLs_without_G/Feature_Analysis_correlation_matrix.png)
 Based on the plot of Pearson correlation, the next experiment is to remove the features which have the highest correlationship with others (threshold of coefficient is 0.9)
 ```
 def remove_high_correlation_features(X, threshold=0.9):
@@ -102,16 +102,28 @@ grid_rf = GridSearchCV(rf, rf_param_grid, cv=5)
 grid_svr = GridSearchCV(svr, svr_param_grid, cv=5)
 grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=5)
 ```
-### Metrics (without $\Delta G$)
+### Metrics (with $\Delta G$)
 The comparison of scatter plots with 4 ML models:
-![figure.1](/model_comparison.png)
+![figure.1](/MLs_with_G/model_comparison.png)
 The SHAP analysis for feature importance:<br>
 | <div style="width:50px">Model</div> | Beeswarm | Bar |
 | --- | --- | --- |
-| **RF** |![figure.2](/Random_Forest_shap_beeswarm.png)|![figure.3](/Random_Forest_shap_bar.png)|
-| **LR** | ![figure.4](/Linear_Regression_shap_beeswarm.png) | ![figure.5](/Linear_Regression_shap_bar.png) |
-| **SVR** | ![figure.6](/SVR_shap_beeswarm.png) | ![figure.7](/SVR_shap_bar.png) |
-| **XGBoost** | ![figure.8](/XGBoost_shap_beeswarm.png) | ![figure.9](/XGBoost_shap_bar.png) |
+| **RF** |![figure.2](/MLs_with_G/Random_Forest_shap_beeswarm.png)|![figure.3](/MLs_with_G/Random_Forest_shap_bar.png)|
+| **LR** | ![figure.4](/MLs_with_G/Linear_Regression_shap_beeswarm.png) | ![figure.5](/MLs_with_G/Linear_Regression_shap_bar.png) |
+| **SVR** | ![figure.6](/MLs_with_G/SVR_shap_beeswarm.png) | ![figure.7](/MLs_with_G/SVR_shap_bar.png) |
+| **XGBoost** | ![figure.8](/MLs_with_G/XGBoost_shap_beeswarm.png) | ![figure.9](/MLs_with_G/XGBoost_shap_bar.png) |
+
+
+### Metrics (without $\Delta G$)
+The comparison of scatter plots with 4 ML models:
+![figure.1](/MLs_without_G/model_comparison.png)
+The SHAP analysis for feature importance:<br>
+| <div style="width:50px">Model</div> | Beeswarm | Bar |
+| --- | --- | --- |
+| **RF** |![figure.2](/MLs_without_G/Random_Forest_shap_beeswarm.png)|![figure.3](/MLs_without_G/Random_Forest_shap_bar.png)|
+| **LR** | ![figure.4](/MLs_without_G/Linear_Regression_shap_beeswarm.png) | ![figure.5](/MLs_without_G/Linear_Regression_shap_bar.png) |
+| **SVR** | ![figure.6](/MLs_without_G/SVR_shap_beeswarm.png) | ![figure.7](/MLs_without_G/SVR_shap_bar.png) |
+| **XGBoost** | ![figure.8](/MLs_without_G/XGBoost_shap_beeswarm.png) | ![figure.9](/MLs_without_G/XGBoost_shap_bar.png) |
 ## DeepChem GNN model
 ### Dataset structure
 ```
