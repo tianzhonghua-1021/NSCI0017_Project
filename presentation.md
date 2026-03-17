@@ -183,4 +183,5 @@ model = dc.models.torch_models.DMPNNModel(
 
 ## Discussion
 - TDA descriptors are efficient to capture the structural information
-- The scaffold is important for diversity of CNTs
+- The scaffold is important for diversity of CNTs, and there is a need for more data but with new automated process or smarter algorithm to decide which will be included experiment.
+- **Next steps**: active learning try? is that need?
