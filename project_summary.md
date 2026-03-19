@@ -286,7 +286,9 @@ Title: Temperature at 700K
 **Langmuir equation**
 After the Gaussian calculation, the $\Delta G$ of different $T$ had been obtained.
 The $\theta$ means the coverage ratio of adsorption, and there are 5 selected pressure (from 1 to 5 bar) to do the calculation with Langmuir equation:
+
 $$K = \exp\left( -\frac{\Delta G^\circ}{RT} \right)$$
+
 $$\theta = \frac{K \cdot (P/P^\circ)}{1 + K \cdot (P/P^\circ)}$$
 Hence, all the data has been obtained.
 ## Dataset construction
@@ -295,7 +297,8 @@ Hence, all the data has been obtained.
 | 1 | 77 | -0.000353 | 1 | 0.513297|
 | ... | ... | ... | ... | ... |
 
-*Note: the unit of $\Delta G$ is eV (transfer from Hartree by Gaussian)*
+*Note:* the unit of $\Delta G$ is eV (transfer from Hartree by Gaussian)
+
 ## Machine learning models comparison
 ### Model selection
 ### Framework
