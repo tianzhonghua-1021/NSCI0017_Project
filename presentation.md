@@ -244,3 +244,8 @@ The model was trained with only T, P for the global features because there is a 
 | 42 | ![figure](./tda_barcodes/42_barcode.png) |
 | 43 | ![figure](./tda_barcodes/43_barcode.png) |
 | 44 | ![figure](./tda_barcodes/44_barcode.png) |
+
+## Discussion
+- what about the closed loop and story (the most worry is FILE ID)? how far it will be a publication for publication?
+- what format is best recommended to display clearly for the whole project ($Gaussian \rightarrow Model \rightarrow Results$)
+- should I pay more effort on active learning based on this project or the next one?
