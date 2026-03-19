@@ -412,6 +412,7 @@ Pearson correlation heatmap:
 ## Graph neural network from Deepchem
 ### Model selection
 Deepchem [DMPNN](https://deepchem.readthedocs.io/en/latest/api_reference/models.html) model and [ref](https://arxiv.org/pdf/1904.01561).
+
 Invoke the model `model = dc.models.torch_models.DMPNNModel` and `featurizer = dc.feat.DMPNNFeaturizer()`
 ### Framework
 
