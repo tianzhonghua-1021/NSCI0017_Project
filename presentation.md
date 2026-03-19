@@ -185,3 +185,62 @@ model = dc.models.torch_models.DMPNNModel(
 - TDA descriptors are efficient to capture the structural information
 - The scaffold is important for diversity of CNTs, and there is a need for more data but with new automated process or smarter algorithm to decide which will be included experiment.
 - **Next steps: which way shoud to be selected**: (1) imporve the optimization of hyperparameters (2) inegrated active learning try (3) create more data automately.
+
+
+<br>
+
+---
+## The result of Deepchem GNN with only T, P (no $\Delta G$)
+The model was trained with only T, P for the global features because there is a high dependent on T and P for the $\theta$. <br>
+![figurea1](/no_global_with_T_P/learning_curve.png)
+![figurea2](/no_global_with_T_P/result.png)
+![figurea3](/no_global_with_T_P/shap_importance_bar.png)
+![figurea4](/no_global_with_T_P/shap_summary.png)
+
+## The bar code for 44 SWCNTs' structures
+| No | Bar code plot |
+| --- | --- |
+| 1 | ![figure](./tda_barcodes/1_barcode.png) |
+| 2 | ![figure](./tda_barcodes/2_barcode.png) |
+| 3 | ![figure](./tda_barcodes/3_barcode.png) |
+| 4 | ![figure](./tda_barcodes/4_barcode.png) |
+| 5 | ![figure](./tda_barcodes/5_barcode.png) |
+| 6 | ![figure](./tda_barcodes/6_barcode.png) |
+| 7 | ![figure](./tda_barcodes/7_barcode.png) |
+| 8 | ![figure](./tda_barcodes/8_barcode.png) |
+| 9 | ![figure](./tda_barcodes/9_barcode.png) |
+| 10 | ![figure](./tda_barcodes/10_barcode.png) |
+| 11 | ![figure](./tda_barcodes/11_barcode.png) |
+| 12 | ![figure](./tda_barcodes/12_barcode.png) |
+| 13 | ![figure](./tda_barcodes/13_barcode.png) |
+| 14 | ![figure](./tda_barcodes/14_barcode.png) |
+| 15 | ![figure](./tda_barcodes/15_barcode.png) |
+| 16 | ![figure](./tda_barcodes/16_barcode.png) |
+| 17 | ![figure](./tda_barcodes/17_barcode.png) |
+| 18 | ![figure](./tda_barcodes/18_barcode.png) |
+| 19 | ![figure](./tda_barcodes/19_barcode.png) |
+| 20 | ![figure](./tda_barcodes/20_barcode.png) |
+| 21 | ![figure](./tda_barcodes/21_barcode.png) |
+| 22 | ![figure](./tda_barcodes/22_barcode.png) |
+| 23 | ![figure](./tda_barcodes/23_barcode.png) |
+| 24 | ![figure](./tda_barcodes/24_barcode.png) |
+| 25 | ![figure](./tda_barcodes/25_barcode.png) |
+| 26 | ![figure](./tda_barcodes/26_barcode.png) |
+| 27 | ![figure](./tda_barcodes/27_barcode.png) |
+| 28 | ![figure](./tda_barcodes/28_barcode.png) |
+| 29 | ![figure](./tda_barcodes/29_barcode.png) |
+| 30 | ![figure](./tda_barcodes/30_barcode.png) |
+| 31 | ![figure](./tda_barcodes/31_barcode.png) |
+| 32 | ![figure](./tda_barcodes/32_barcode.png) |
+| 33 | ![figure](./tda_barcodes/33_barcode.png) |
+| 34 | ![figure](./tda_barcodes/34_barcode.png) |
+| 35 | ![figure](./tda_barcodes/35_barcode.png) |
+| 36 | ![figure](./tda_barcodes/36_barcode.png) |
+| 37 | ![figure](./tda_barcodes/37_barcode.png) |
+| 38 | ![figure](./tda_barcodes/38_barcode.png) |
+| 39 | ![figure](./tda_barcodes/39_barcode.png) |
+| 40 | ![figure](./tda_barcodes/40_barcode.png) |
+| 41 | ![figure](./tda_barcodes/41_barcode.png) |
+| 42 | ![figure](./tda_barcodes/42_barcode.png) |
+| 43 | ![figure](./tda_barcodes/43_barcode.png) |
+| 44 | ![figure](./tda_barcodes/44_barcode.png) |
