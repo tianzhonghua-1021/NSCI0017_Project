@@ -290,6 +290,7 @@ The $\theta$ means the coverage ratio of adsorption, and there are 5 selected pr
 $$K = \exp\left( -\frac{\Delta G^\circ}{RT} \right)$$
 
 $$\theta = \frac{K \cdot (P/P^\circ)}{1 + K \cdot (P/P^\circ)}$$
+
 Hence, all the data has been obtained.
 ## Dataset construction
 | File ID | Temperature (K) | G | Pressure (bar) | theta |
@@ -301,7 +302,11 @@ Hence, all the data has been obtained.
 
 ## Machine learning models comparison
 ### Model selection
+```
+Linear Regression (benchmark), Random Forest, Support Vector Regression, XGBoost
+```
 ### Framework
+
 ### Feature engineering
 ### Metrics comparison
 ### Uncertainty and applicability

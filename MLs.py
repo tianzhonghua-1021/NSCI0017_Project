@@ -11,7 +11,41 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import GroupShuffleSplit, GroupKFold
+from sklearn.utils import resample
 
+def analyze_model_uncertainty(model, X_train, y_train, X_test, n_iterations=20, model_name="Model"):
+    print(f"Performing Bootstrap Uncertainty Analysis for {model_name}...")
+    boot_preds = []
+    
+    for i in range(n_iterations):
+        # Resample data
+        X_resample, y_resample = resample(X_train, y_train, random_state=i)
+        
+        # Create a new instance of the model with same parameters
+        from sklearn.base import clone
+        model_copy = clone(model)
+        model_copy.fit(X_resample, y_resample)
+        
+        # Predict on test set
+        boot_preds.append(model_copy.predict(X_test))
+        
+    boot_preds = np.array(boot_preds)
+    std_dev = np.std(boot_preds, axis=0)
+    mean_pred = np.mean(boot_preds, axis=0)
+    
+    # Visualization
+    plt.figure(figsize=(5, 5), dpi=300)
+    sc = plt.scatter(y_test, mean_pred, c=std_dev, cmap='viridis', alpha=0.7, edgecolors='k')
+    plt.colorbar(sc, label='Prediction Uncertainty (Std Dev)')
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+    
+    plt.title(f'Uncertainty Analysis: {model_name}')
+    plt.xlabel('Measured Theta')
+    plt.ylabel('Mean Predicted Theta')
+    plt.tight_layout()
+    plt.savefig(f'{model_name}_uncertainty_analysis.png')
+    
+    return std_dev
 
 
 # shap with visualization
@@ -53,7 +87,7 @@ def plot_correlation_matrix(df, model_name="Dataset"):
         cmap='coolwarm', 
         fmt=".2f", 
         linewidths=0.2,
-        annot_kws={"size": 4}, 
+        annot_kws={"size": 8}, 
         cbar_kws={'shrink': .4}
     )
     plt.title(f"Pearson Correlation Matrix: {model_name}")
@@ -76,19 +110,9 @@ csv_dir = r"D:\UCL Courses\NSCI0016 Literature Report\dataset and models\deepche
 colnames = ['FileID', 'Temperature', 'E', 'G', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum', 'theta']
 df = pd.read_csv(csv_dir)
 df.columns = df.columns.str.strip()
-# transfer to numeric variables
-# df = pd.get_dummies(df)
-# # transfer to numeric for File ID split
-# df = pd.get_dummies(df.drop(columns=['FileID']))
-# groups = df['FileID'].copy()
-# y = df['theta'].copy()
-# cols_to_drop = ['G', 'E', 'theta', 'FileID']
-# X_raw = df.drop(columns=cols_to_drop)
-# X = pd.get_dummies(X_raw)
 
 # data splitting (change for "with G" and "without G")
-X = df.drop(['G','E', 'theta','FileID', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum'], axis=1)
-# X = df.drop(['E', 'theta','FileID'], axis=1)
+X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
 
 # Pearson analysis
@@ -102,13 +126,6 @@ feature_names = X.columns.tolist()
 # divide the label into bins
 y_bins = pd.cut(y, bins=5, labels=False)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
-
-# # File ID split method
-# groups = df['FileID']
-# gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-# train_idx, test_idx = next(gss.split(X, y, groups=groups))
-# X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-# y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
 
 scaler_X = StandardScaler()
 X_train_scaled = scaler_X.fit_transform(X_train)
@@ -140,16 +157,6 @@ grid_svr.fit(X_train_scaled, y_train)
 grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=5)
 grid_xgb.fit(X_train_scaled, y_train)
 lr.fit(X_train_scaled, y_train) 
-
-# # File ID cross validation
-# group_kfold = GroupKFold(n_splits=5)
-# grid_rf = GridSearchCV(rf, rf_param_grid, cv=group_kfold)
-# grid_rf.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
-# grid_svr = GridSearchCV(svr, svr_param_grid, cv=group_kfold)
-# grid_svr.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
-# grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=group_kfold)
-# grid_xgb.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
-# lr.fit(X_train_scaled, y_train) 
 
 # make predictions on the test set
 best_rf = grid_rf.best_estimator_
@@ -211,6 +218,28 @@ plt.ylabel('Predicted Theta')
 plt.tight_layout()
 plt.savefig('model_comparison.png')
 
+# --- Add this after your performance metrics and before SHAP ---
+
+# List of models and their names for iteration
+models_to_analyze = [
+    (best_rf, "Random_Forest"),
+    (best_svr, "SVR"),
+    (lr, "Linear_Regression"),
+    (best_xgb, "XGBoost")
+]
+
+uncertainty_results = {}
+
+for model_obj, name in models_to_analyze:
+    std_uncertainty = analyze_model_uncertainty(
+        model=model_obj, 
+        X_train=X_train_scaled, 
+        y_train=y_train, 
+        X_test=X_test_scaled, 
+        n_iterations=15, # You can increase this for better precision
+        model_name=name
+    )
+    uncertainty_results[name] = std_uncertainty
 
 # shap
 shap_values_rf = run_shap_analysis(best_rf, X_test_scaled, X.columns, model_name="Random_Forest")
