@@ -76,20 +76,20 @@ csv_dir = r"D:\UCL Courses\NSCI0016 Literature Report\dataset and models\deepche
 colnames = ['FileID', 'Temperature', 'E', 'G', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum', 'theta']
 df = pd.read_csv(csv_dir)
 df.columns = df.columns.str.strip()
-# # transfer to numeric variables
+# transfer to numeric variables
 # df = pd.get_dummies(df)
-# transfer to numeric for File ID split
+# # transfer to numeric for File ID split
 # df = pd.get_dummies(df.drop(columns=['FileID']))
-groups = df['FileID'].copy()
-y = df['theta'].copy()
-cols_to_drop = ['G', 'E', 'theta', 'FileID']
-X_raw = df.drop(columns=cols_to_drop)
-X = pd.get_dummies(X_raw)
+# groups = df['FileID'].copy()
+# y = df['theta'].copy()
+# cols_to_drop = ['G', 'E', 'theta', 'FileID']
+# X_raw = df.drop(columns=cols_to_drop)
+# X = pd.get_dummies(X_raw)
 
-# # data splitting (change for "with G" and "without G")
-# # X = df.drop(['G','E', 'theta','FileID'], axis=1)
+# data splitting (change for "with G" and "without G")
+X = df.drop(['G','E', 'theta','FileID', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum'], axis=1)
 # X = df.drop(['E', 'theta','FileID'], axis=1)
-# y = df['theta']
+y = df['theta']
 
 # Pearson analysis
 analysis_df = X.copy()
@@ -99,16 +99,16 @@ plot_correlation_matrix(analysis_df, model_name="Feature_Analysis")
 X, dropped_cols = remove_high_correlation_features(X, threshold=0.9)
 feature_names = X.columns.tolist()
 
-# # divide the label into bins
-# y_bins = pd.cut(y, bins=5, labels=False)
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
+# divide the label into bins
+y_bins = pd.cut(y, bins=5, labels=False)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
 
-# File ID split method
-groups = df['FileID']
-gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-train_idx, test_idx = next(gss.split(X, y, groups=groups))
-X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+# # File ID split method
+# groups = df['FileID']
+# gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+# train_idx, test_idx = next(gss.split(X, y, groups=groups))
+# X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+# y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
 
 scaler_X = StandardScaler()
 X_train_scaled = scaler_X.fit_transform(X_train)
@@ -132,24 +132,24 @@ xgb_param_grid = {
     'max_depth': [3, 6],
     'subsample': [0.8, 1.0]
 }
-# # initialize the grid search object
-# grid_rf = GridSearchCV(rf, rf_param_grid, cv=5)
-# grid_rf.fit(X_train_scaled, y_train)
-# grid_svr = GridSearchCV(svr, svr_param_grid, cv=5)
-# grid_svr.fit(X_train_scaled, y_train)
-# grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=5)
-# grid_xgb.fit(X_train_scaled, y_train)
-# lr.fit(X_train_scaled, y_train) 
-
-# File ID cross validation
-group_kfold = GroupKFold(n_splits=5)
-grid_rf = GridSearchCV(rf, rf_param_grid, cv=group_kfold)
-grid_rf.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
-grid_svr = GridSearchCV(svr, svr_param_grid, cv=group_kfold)
-grid_svr.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
-grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=group_kfold)
-grid_xgb.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
+# initialize the grid search object
+grid_rf = GridSearchCV(rf, rf_param_grid, cv=5)
+grid_rf.fit(X_train_scaled, y_train)
+grid_svr = GridSearchCV(svr, svr_param_grid, cv=5)
+grid_svr.fit(X_train_scaled, y_train)
+grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=5)
+grid_xgb.fit(X_train_scaled, y_train)
 lr.fit(X_train_scaled, y_train) 
+
+# # File ID cross validation
+# group_kfold = GroupKFold(n_splits=5)
+# grid_rf = GridSearchCV(rf, rf_param_grid, cv=group_kfold)
+# grid_rf.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
+# grid_svr = GridSearchCV(svr, svr_param_grid, cv=group_kfold)
+# grid_svr.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
+# grid_xgb = GridSearchCV(xgb, xgb_param_grid, cv=group_kfold)
+# grid_xgb.fit(X_train_scaled, y_train, groups=groups.iloc[train_idx])
+# lr.fit(X_train_scaled, y_train) 
 
 # make predictions on the test set
 best_rf = grid_rf.best_estimator_
