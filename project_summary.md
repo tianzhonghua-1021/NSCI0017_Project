@@ -303,14 +303,94 @@ Hence, all the data has been obtained.
 ## Machine learning models comparison
 ### Model selection
 ```
-Linear Regression (benchmark), Random Forest, Support Vector Regression, XGBoost
+rf = RandomForestRegressor(random_state=42)
+svr = SVR()
+lr = LinearRegression()
+xgb = XGBRegressor(random_state=42, objective='reg:squarederror')
 ```
 ### Framework
+**The dataset loading**
+```
+csv_dir = r"D:\UCL Courses\NSCI0016 Literature Report\dataset and models\deepchem\0314analysis\dataset_full_feat.csv"
+colnames = ['FileID', 'Temperature', 'E', 'G', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum', 'theta']
+df = pd.read_csv(csv_dir)
+X = df.drop(['G','E', 'theta','FileID'], axis=1)
+y = df['theta']
+```
+**Pearson correlation analysis and drop features with high correlation**
+```
+# Pearson analysis
+analysis_df = X.copy()
+analysis_df['theta'] = y 
+plot_correlation_matrix(analysis_df, model_name="Feature_Analysis")
+X, dropped_cols = remove_high_correlation_features(X, threshold=0.9)
+feature_names = X.columns.tolist()
+```
+**Data split**
+```
+# divide the label into bins
+y_bins = pd.cut(y, bins=5, labels=False)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y_bins, shuffle=True)
+```
+**Normalization**
+```
+scaler_X = StandardScaler()
+X_train_scaled = scaler_X.fit_transform(X_train)
+X_test_scaled = scaler_X.transform(X_test)
+```
+**Grid search**
+```
+# define the parameter grid
+rf_param_grid = {'n_estimators': [50, 100, 200], 'max_depth': [5, 10, 15]}
+svr_param_grid = {
+    'C': [0.1, 1, 10, 100],
+    'epsilon': [0.01, 0.1, 0.2],
+    'kernel': ['rbf']
+}
+xgb_param_grid = {
+    'n_estimators': [100, 200],
+    'learning_rate': [0.01, 0.1],
+    'max_depth': [3, 6],
+    'subsample': [0.8, 1.0]
+}
+```
+**Boostrap uncertainty**
+```
+models_to_analyze = [
+    (best_rf, "Random_Forest"),
+    (best_svr, "SVR"),
+    (lr, "Linear_Regression"),
+    (best_xgb, "XGBoost")
+]
 
+uncertainty_results = {}
+
+for model_obj, name in models_to_analyze:
+    std_uncertainty = analyze_model_uncertainty(
+        model=model_obj, 
+        X_train=X_train_scaled, 
+        y_train=y_train, 
+        X_test=X_test_scaled, 
+        n_iterations=15, # You can increase this for better precision
+        model_name=name
+    )
+    uncertainty_results[name] = std_uncertainty
+```
 ### Feature engineering
-### Metrics comparison
-### Uncertainty and applicability
-### Interpretation
+Pearson correlation heatmap:
+![fig](/MLs_without_G/Feature_Analysis_correlation_matrix.png)
+### Metrics comparison (Scatter, SHAP, Uncertainty)
+**Feature:**
+```
+'Temperature', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none'
+```
+**Model comparison**
+![fig](/ML_without_G_and_TDA/model_comparison.png)
+
+| Model | SHAP bar | SHAP beeswarm | Uncertainty |
+| --- | --- | --- | --- |
+| LR | ![fig](/ML_without_G_and_TDA/Linear_Regression_shap_bar.png) | ![fig](/ML_without_G_and_TDA/Linear_Regression_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/Linear_Regression_uncertainty_analysis.png) |
+
 
 ## Graph neural network from Deepchem
 ### Model selection
