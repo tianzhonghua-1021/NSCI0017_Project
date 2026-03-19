@@ -380,6 +380,7 @@ for model_obj, name in models_to_analyze:
 Pearson correlation heatmap:
 ![fig](/MLs_without_G/Feature_Analysis_correlation_matrix.png)
 ### Metrics comparison (Scatter, SHAP, Uncertainty)
+#### Simple feature (without TDA)
 **Feature:**
 ```
 'Temperature', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none'
@@ -394,11 +395,22 @@ Pearson correlation heatmap:
 | SVR | ![fig](/ML_without_G_and_TDA/SVR_shap_bar.png) | ![fig](/ML_without_G_and_TDA/SVR_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/SVR_uncertainty_analysis.png) |
 | XGBoost | ![fig](/ML_without_G_and_TDA/XGBoost_shap_bar.png) | ![fig](/ML_without_G_and_TDA/XGBoost_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/XGBoost_uncertainty_analysis.png) |
 
+#### Complex feature (with TDA)
+**Feature:**
+```
+'Temperature', 'Pressure' , 'length', 'n', 'm', 'diameter', 'Ti_count', 'FG_C=O', 'FG_NH2', 'FG_SO3H', 'FG_none', 'TiType_1Ti_substitution', 'TiType_1Ti_surface', 'TiType_2Ti_substitution', 'TiType_2Ti_surface', 'TiType_none', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum'
+```
+**Model comparison**
+![fig](/MLs_without_G/model_comparison.png)
+| Model | SHAP bar | SHAP beeswarm | Uncertainty |
+| --- | --- | --- | --- |
+| LR | ![fig](/MLs_without_G/Linear_Regression_shap_bar.png) | ![fig](/MLs_without_G/Linear_Regression_shap_beeswarm.png) | ![fig](/MLs_without_G/Linear_Regression_uncertainty_analysis.png) |
+| RF | ![fig](/MLs_without_G/Random_Forest_shap_bar.png) | ![fig](/MLs_without_G/Random_Forest_shap_beeswarm.png) | ![fig](/MLs_without_G/Random_Forest_uncertainty_analysis.png) |
+| SVR | ![fig](/MLs_without_G/SVR_shap_bar.png) | ![fig](/MLs_without_G/SVR_shap_beeswarm.png) | ![fig](/MLs_without_G/SVR_uncertainty_analysis.png) |
+| XGBoost | ![fig](/MLs_without_G/XGBoost_shap_bar.png) | ![fig](/MLs_without_G/XGBoost_shap_beeswarm.png) | ![fig](/MLs_without_G/XGBoost_uncertainty_analysis.png) |
 
 ## Graph neural network from Deepchem
 ### Model selection
 ### Framework
 ### Feature engineering
 ### Metrics comparison
-### Uncertainty and applicability
-### Interpretation
