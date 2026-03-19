@@ -111,7 +111,7 @@ colnames = ['FileID', 'Temperature', 'E', 'G', 'Pressure' , 'length', 'n', 'm', 
 df = pd.read_csv(csv_dir)
 df.columns = df.columns.str.strip()
 
-# data splitting (change for "with G" and "without G")
+# data (change for "with G" and "without G")
 X = df.drop(['G','E', 'theta','FileID'], axis=1)
 y = df['theta']
 
@@ -218,7 +218,6 @@ plt.ylabel('Predicted Theta')
 plt.tight_layout()
 plt.savefig('model_comparison.png')
 
-# --- Add this after your performance metrics and before SHAP ---
 
 # List of models and their names for iteration
 models_to_analyze = [

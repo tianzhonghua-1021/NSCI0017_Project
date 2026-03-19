@@ -390,6 +390,9 @@ Pearson correlation heatmap:
 | Model | SHAP bar | SHAP beeswarm | Uncertainty |
 | --- | --- | --- | --- |
 | LR | ![fig](/ML_without_G_and_TDA/Linear_Regression_shap_bar.png) | ![fig](/ML_without_G_and_TDA/Linear_Regression_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/Linear_Regression_uncertainty_analysis.png) |
+| RF | ![fig](/ML_without_G_and_TDA/Random_Forest_shap_bar.png) | ![fig](/ML_without_G_and_TDA/Random_Forest_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/Random_Forest_uncertainty_analysis.png) |
+| SVR | ![fig](/ML_without_G_and_TDA/SVR_shap_bar.png) | ![fig](/ML_without_G_and_TDA/SVR_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/SVR_uncertainty_analysis.png) |
+| XGBoost | ![fig](/ML_without_G_and_TDA/XGBoost_shap_bar.png) | ![fig](/ML_without_G_and_TDA/XGBoost_shap_beeswarm.png) | ![fig](/ML_without_G_and_TDA/XGBoost_uncertainty_analysis.png) |
 
 
 ## Graph neural network from Deepchem
