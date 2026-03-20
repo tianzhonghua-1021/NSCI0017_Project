@@ -411,10 +411,263 @@ Pearson correlation heatmap:
 
 ## Graph neural network from Deepchem
 ### Model selection
-Deepchem [DMPNN](https://deepchem.readthedocs.io/en/latest/api_reference/models.html) model and [ref](https://arxiv.org/pdf/1904.01561).
+**GNN model selection**
+- Deepchem [DMPNN](https://deepchem.readthedocs.io/en/latest/api_reference/models.html) model and [ref](https://arxiv.org/pdf/1904.01561).
+- Invoke the model `model = dc.models.torch_models.DMPNNModel` and `featurizer = dc.feat.DMPNNFeaturizer()`
 
-Invoke the model `model = dc.models.torch_models.DMPNNModel` and `featurizer = dc.feat.DMPNNFeaturizer()`
+**Interpretation strategy selection**
+- Integrated Gradient(IG), [ref](https://arxiv.org/abs/1703.01365).
+
 ### Framework
+**The total process can be display as below:**
+
+```
+data_prepare.py -> csv (atom type, x, y, z) -> model.load -> model.split -> model.train -> model.test -> model.analysis
+```
+
+**data prepare**
+Extract the `atom type` and `xyz` coordinates from gjf files and create new csv files matched the name.
+
+```
+for filename in os.listdir(input_folder):
+        if filename.endswith(".gjf"):
+            file_path = os.path.join(input_folder, filename)
+            try:
+                file_id_match = re.search(r'(\d+)', filename)
+                if file_id_match:
+                    original_id = int(file_id_match.group(1))
+                    new_id = original_id + 44
+                    csv_filename = f"{new_id}.csv"
+                else:
+                    print(f"skip {filename}: not found the number")
+                    continue
+            except Exception as e:
+                print(f"dealing with {filename} get error: {e}")
+                continue
+            # ---------------------------
+            with open(file_path, 'r') as f:
+                lines = f.readlines()
+
+            # find the start of coordinate
+            coords = []
+            start_reading = False
+            
+            for line in lines:
+                line = line.strip()
+                # match the charge line
+                if re.match(r'^-?\d+\s+\d+$', line):
+                    start_reading = True
+                    continue
+                
+                if start_reading:
+                    # if space line
+                    if not line:
+                        break
+                    
+                    # divide atom type and coordinate
+                    parts = line.split()
+                    if len(parts) >= 4:
+                        coords.append(parts[:4])
+
+            # transfer to DataFrame
+            df = pd.DataFrame(coords, columns=['Element', 'X', 'Y', 'Z'])
+```
+**load data**
+```
+if os.path.exists(target_csv):
+            mol = csv_to_rdkit_mol_safe(target_csv)
+            if mol:
+                feat = featurizer.featurize([mol])
+                if len(feat) > 0:
+                    T = float(row['Temperature (K)'])
+                    P = float(row['Pressure (bar)'])
+                    phys_feats = [float(row['Temperature (K)']), float(row['Pressure (bar)'])]
+                    combined_global = np.concatenate([phys_feats])
+                    
+                    temp_graphs.append(feat[0])
+                    temp_globals.append(combined_global)
+                    y_list.append([row['theta']])
+                    w_list.append([1.0])
+                    f_ids.append(fid)
+```
+
+**scaling and dataframe**
+
+```
+scaler = StandardScaler()
+scaled_globals = scaler.fit_transform(temp_globals)
+
+X = np.array(X_list, dtype=object)
+y = np.array(y_list)
+w = np.array(w_list)
+dataset = dc.data.DiskDataset.from_numpy(X=X, y=y, w=w, ids=f_ids, data_dir=dataset_cache_dir)
+```
+
+**data splitting**
+
+```
+splitter = dc.splits.RandomSplitter()
+train_dataset, test_dataset = splitter.train_test_split(dataset, frac_train=0.8, seed=42)
+```
+
+**model construction**
+
+```
+model = dc.models.torch_models.DMPNNModel(
+    mode='regression',
+    n_tasks=1,
+    batch_size=64,
+    global_features_size=2,  #T,P
+    enc_hidden=32,  # Size of hidden layer in the encoder layer
+    ffn_hidden=32,  # Size of hidden layer in the feed-forward network layer
+    ffn_layers=3,    # Number of layers in the feed-forward network layer
+    # learning_rate=1e-4,
+    ffn_dropout_p = 0.3,
+    learning_rate=dc.models.optimizers.ExponentialDecay(5e-4, 0.9, 1000)
+)
+```
+**model training**
+
+```
+num_epochs = 500
+train_losses = []
+for epoch in range(num_epochs):
+    loss = model.fit(train_dataset, nb_epoch=1)
+    train_losses.append(loss)
+```
 
 ### Feature engineering
+```
+node_feat=[N,133]
+edge_feat=[E,14]
+cat_feat=[E,147]
+encoder_output=[1,32] # enc_hidden=32
+global_feat=[2] # T&P
+combine_input=[1,34] # combine global_feat
+output = [1,1] # theta
+```
+
 ### Metrics comparison
+**GNN result analysis**
+Due to that there are only 2 global features (T&P), so the SHAP feature importance analysis has only 2 bars and clusters in the figures below.
+
+| **Scatter plot** | **Learning curve** |
+| :--- | :--- |
+| ![fig](/GNN_without_TDA/result.png) | ![fig](/GNN_without_TDA/learning_curve.png) |
+| **SHAP bar** | **SHAP beeswarm** |
+| ![fig](/GNN_without_TDA/shap_importance_bar.png) | ![fig](/GNN_without_TDA/shap_summary.png) |
+
+**Uncertainty analysis**
+
+```
+# random sampling
+train_indices = np.random.choice(len(train_dataset), len(train_dataset), replace=True)
+        resampled_train = train_dataset.select(train_indices)
+
+# New model instance with identical hyperparams
+boot_model = dc.models.torch_models.DMPNNModel(
+            mode='regression',
+            n_tasks=1,
+            batch_size=64,
+            global_features_size=2, 
+            enc_hidden=32,
+            ffn_hidden=32,
+            ffn_layers=3,
+            ffn_dropout_p=0.3,
+            learning_rate=5e-4
+        )
+# Model training
+boot_model.fit(resampled_train, nb_epoch=100)
+
+# Prediction
+preds_raw = boot_model.predict(test_dataset)
+preds = transformers[0].untransform(preds_raw).flatten()
+all_boot_preds.append(preds)
+
+# Get results
+all_boot_preds = np.array(all_boot_preds)
+mean_preds = np.mean(all_boot_preds, axis=0)
+std_devs = np.std(all_boot_preds, axis=0)
+```
+
+![fig](/GNN_without_TDA/uncertainty_analysis.png)
+
+Based on the `Uncertainty analysis`, we can see the high certainty prediction on the data with high $\theta$ resulting from the distribution of input dataset. For the data with lower value of the label, the uncertainty increases.
+
+**Interpretation**
+
+Because of the highly integrated structure of DPMNN from DeepChem, the `Integrated Gradient (IG)` has been selected in explanation section. The IG process involves uniformly decomposing the molecular characteristics from a "completely blank" state to a "real state" into multiple steps. The cumulative model then calculates the sensitivity (gradient) of the characteristics' changes at each step, thereby accurately determining the contribution of each atom to the prediction result.
+
+The core function of `Integrated Gradient (IG)` is:
+
+$$\text{IntegratedGrads}_i(x) \colon\colon= (x_i - x'_i) \times \int_{\alpha=0}^{1} \frac{\partial F(x' + \alpha(x - x'))}{\partial x_i} d\alpha$$
+
+$\alpha(x - x')$ :
+```
+f_step = f_ini_baseline + alpha * (f_ini_orig - f_ini_baseline)
+```
+$\frac{\partial F}{\partial x_i}$:
+```
+output = py_model(pyg_batch)
+loss = output.sum()
+loss.backward()
+```
+$\int_{\alpha=0}^{1} ... d\alpha$:
+```
+if f_step.grad is not None:
+    total_grads += f_step.grad
+```
+$(x_i - x'_i)$:
+```
+edge_importance = ((f_ini_orig - f_ini_baseline) * (total_grads / n_steps)).sum(dim=-1)
+```
+
+After the integral cumulation, the structural importance graphs can be obtained:
+
+| No | Structural importance |
+| :--- | :--- |
+| 1 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_1.png) |
+| 2 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_2.png) |
+| 3 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_3.png) |
+| 4 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_4.png) |
+| 5 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_5.png) |
+| 6 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_6.png) |
+| 7 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_7.png) |
+| 8 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_8.png) |
+| 9 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_9.png) |
+| 10 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_10.png) |
+| 11 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_11.png) |
+| 12 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_12.png) |
+| 13 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_13.png) |
+| 14 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_14.png) |
+| 15 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_15.png) |
+| 16 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_16.png) |
+| 17 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_17.png) |
+| 18 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_18.png) |
+| 19 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_19.png) |
+| 20 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_20.png) |
+| 21 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_21.png) |
+| 22 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_22.png) |
+| 23 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_23.png) |
+| 24 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_24.png) |
+| 25 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_25.png) |
+| 26 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_26.png) |
+| 27 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_27.png) |
+| 28 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_28.png) |
+| 29 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_29.png) |
+| 30 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_30.png) |
+| 31 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_31.png) |
+| 32 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_32.png) |
+| 33 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_33.png) |
+| 34 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_34.png) |
+| 35 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_35.png) |
+| 36 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_36.png) |
+| 37 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_37.png) |
+| 38 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_38.png) |
+| 39 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_39.png) |
+| 40 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_40.png) |
+| 41 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_41.png) |
+| 42 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_42.png) |
+| 43 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_43.png) |
+| 44 | ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_44.png) |
+
