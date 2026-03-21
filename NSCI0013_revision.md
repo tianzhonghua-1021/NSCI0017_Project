@@ -104,34 +104,226 @@ cuvettes`
 ****
 
 ## SEM
+**Resolution range:** `1 nm`
+**De Broglie equation:** $\lambda=\frac{h}{mev},v(velocity)$
+**Interaction volume:**
+- compositional contrast-`BSE-high energy`
+- topographic contrast-`SE-low energy`
+- atomic number $\uparrow$ -> `BSE` large angle change $\uparrow$ -> lighter zone $\uparrow$
+- $\eta=\frac{\eta_{BSE}}{\eta_{i}}$
+
+**Electron guns:**
+- Tungsten
+- Thermionic
+- field emmision (high current & small beam spot)
+
+**Structures:**
+- `condensor lens`
+  - control how many electrons
+- `Aperture`
+- `objective lens` (can with scanning coil)
+  - focus the beam on a spot
+- `speciman stage` (sample)
+- `detector`
+  - `photon multiplier`
+  - `light guide`
+  - `faraday cage`
+- `vaccum system`
+
+**Resolution:**
+total resolution: $d_f=\sqrt{d_p^2+d_s^2+d_c^2+d_d^2}$
+- $d_p=(\frac{4i_p}{\beta\pi^2\alpha^2}),~ (i_p=\text{current})$ means the probe size, which is the most important->`controlled by (1) electron gun (2) probe current (3) accelerated voltage`
+- $d_s\sim C_s\alpha^3, ~(\alpha=\text{aperture angle})$ means the spherical aberration
+- $d_c\sim C_c\alpha(\frac{\Delta E}{E_0})$ means chromatic aberration
+- Astigmatism
+
+**Operation variables:**
+- `working distance & depth of field`: decrease aperture size and magnification; increase working distance.
+- `accelerated voltage & current`: low $i_p$ -> small probe size (high resolution); high accelerated voltage -> small probe size (high resolution)
+
+**Conductive coating:**
+- vaccum evaporation
+- sputtering
 
 ****
-
 
 ## TEM
+**Resolution range:** `0.1 nm`
+**Electron source:**
+- `thermionic gun`: heat -> $e^-$
+- `field emission gun (FEG)`: E field -> $e^-$
+
+**Structures:**
+- `electron gun (with accelerator)`
+- `condense lens`
+- `sample`
+  - speciman trimmer & diamond knife -> Cu grid -> sample holder
+  - $\text{thickness} \sim Z^2$
+- `objective lens`
+  - first magnified image
+- `intermediate lens`
+  - mode shift & magnify
+- `projective lens`
+  - final magnify
+- `detector`
+  - screen: phosphor screen
+  - CCD: $e^-$ -> screen -> $h\nu$ -> CCD
+  - CMOS (FET arrays): $e^-$ -> CMOS
+- `vaccum system`
+  - rotary puump
+  - diffusion pump
+  - turbo pump
+  - ion getter pump
+  - *illumination (highest vaccum), sample holder (medium vaccum), data recording (lowest vaccum)*
+
+**Types of TEM:**
+- `bright field (BF)`
+- `dark field (DF)`
+- `selected area electron diffraction (SAED)`: to get electron diffraction pattern
+  - SAED aperture
+  - back focal plane
+- `high angle annular dark field (HAADF)`: $Z-contrast:~ Z\uparrow ~ brighter$
+- `electron energy loss spectroscopy (EELS)`:
+  - zero loss peak (ZLP) -> `thickness`
+  - plasmon region -> `band gap`,`hybridization`
+  - inner shell ionization -> `chemical composition`, `valance analysis` -> sensitive to low `Z`
 
 ****
-
 
 ## XRF
+**Light range:** 
+- X-ray `0.01-10 nm`
+- hard X-ray `> 10 keV`; soft X-ray `< 10 keV`
+
+**Degree of flourescence:**
+- thickness
+- density
+- material sample
+
+**Principle:**
+```
+[high energy e- -> target material] -> X-ray -> sample -> detector (semiconductor Ge/Si)
+```
+**X-ray analysis**
+- Characteristic X-ray
+- Continous X-ray (background/noise)
+- setting intensity of X-ray (K-edge):
+  - below K-edge: only scatter peak
+  - above K-edge: $K_\alpha/K_\beta$ + scatter peak
+
+**Auger electrons**
+```
+x-ray -> e(K) -> h+ -> e(L) jump to K -> emit new x-ray -> another e'(L) ejected [Auger electron]
+```
+**Types of XRF:**
+- energy dispersive XRF (ED-XRF)
+  - fast & cheap
+  - poor resolution & low sensitivity to low Z
+- wavelength dispersive XRF (WD-XRF)
+  - high resolution & high sensitivity to low Z
+  - change angle of collimator -> find out characteristic wavelength
 
 ****
-
 
 ## SIMS
+**Method:** `destructive`, but all elements detectable
+**Process:**
+```
+select primary ion -> change settings -> complete mass spectra
+```
+**Primary ion source:**
+- $O_2^{2+}$ (high electronegativity) -> `positive secondary ion` -> detect $Na,Mg,B...$ (low electronegativity)
+- $Cs^{+}$ (low electronegativity) -> `negative secondary ion` - detect $H,C,O,P...$ (high electronegativity)
+
+**Mass analyzer:**
+- magnetic sector
+  - electrostatic -> select `v (velocity)` (E field)
+  - magnetic -> `charge to mass` (B field) -> $R=\frac{mv}{qB}$
+- time of flight (TOF): `lower mass` -> `higher velocity` -> `shorter time`
+
+**Modes:**
+- static SIMS: complete spectrum (low sputtering rate, low incident)
+- dynamic SIMS: depth profile for certain ion (high sputtering rate, high incident)
+- image SIMS: scan (like static)
+
+**Total sputter yield:**
+- sputter yield
+- ion sputter yield
+- influence by:
+  - Matrix effect
+  - Surface coverage of reactive elements
+  - Background pressure
+  - Orientation of crystallographic axes
+  - Angle of emission of detected secondary ions
+
+**SIMS vs EDX**
+|TYPE | SIMS | EDX |
+| :-: | :-: | :-: |
+| in | ions | x-ray |
+| out | secondary ions | characteristic x-ray |
+| sampling depth | surface (0.5-1 nm) | deep (0.5-5 $\mu m$) |
+| information | element/isotope | element composition |
+| detection | 1ppm or lower (ppb) | ~hundreds ppm |
+| spot size | hundreds of $\mu m$ or 1mm | 10 nm |
+| depth profiling | high | low |
+| insulating sample | okay | need conductive surface |
+| surface damage | destructive | non-destructive |
 
 ****
 
-
 ## PL
+**Information from $\lambda$:**
+- FWHM $\downarrow$ - crystal quality $\uparrow$
+- from $\lambda$ -> band gap ($E_g=\frac{hc}{\lambda}$)
+- other peaks -> crystal defects/impurity
+
+**Flourescence & phosphorescence:**
+- flourescence: `S1->S0`
+- phosphorescence: `T1->S0`
+
+**Application:**
+- band gap
+- defect identification (semiconductor)
+- impurity detection
+
+**Case study (p13 UV-Vis vs PL):**
+- UV-Vis vs PL: red shift -> Stokes shift ($\Delta \lambda \rightarrow\Delta E$)
+- TRPL (time resolved PL): SLG -> carriers -> transfer charges -> lower counts of photon emission
+
+**Quantum dot:**
+- two methods of fabrication:
+  - top-down
+  - bottom-up
+- core-shell structure:
+  - post treatment (thermal annealing)
+  - composition gradient
+  - `QD (0-dim) - discrete DOS -> narrow band gap -> pure light`
+  - `shell` can protect, deal with dangling bond
+  - `ligand` can enhance stability, surface modification, ligand exchange
+- `QD size` larger -> `narrow band gap` -> `red` light
 
 ****
 
 
 ## XPS
+**Principle:**
+incident light -> $e^-$ overcome BE (binding energy) -> arrive $E_F$ (Fermi energy level) -> overcome $\phi_{work function}$ -> emitted
 
+**Levels:**
+- valence level: `properties`
+- core level: `element type` & `concentration`
+
+**Spin-orbital coupling:**
+total angular momentum number: `j=|l+s|`
+s-orbital: `l=0`, `s=1/2,-1/2` `j=1/2`
+p-orbital: `l=1`, `s=1/2.-1/2` `j=1/2 or 3/2` (2 peaks of $p^{\frac{3}{2}} ~and ~p^\frac{1}{2}$)
+the number of electrons in these orbitals can be calculated: `2j+1`, for $p^{\frac{3}{2}} = 2 \times \frac{3}{2} + 1 = 4$
+
+
+**Hard X-ray Photoelectron Spectroscopy (HAXPES)**
+- noram XPS: `depth 4-7 nm`
+- HAXPES: `depth 20-30 nm`
 ****
-
 
 ## XRD
 
