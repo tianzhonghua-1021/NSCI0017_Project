@@ -110,7 +110,7 @@ cuvettes`
 - compositional contrast-`BSE-high energy`
 - topographic contrast-`SE-low energy`
 - atomic number $\uparrow$ -> `BSE` large angle change $\uparrow$ -> lighter zone $\uparrow$
-- $\eta=\frac{\eta_{BSE}}{\eta_{i}}$
+- $\eta=\frac{\eta_{BSE}}{\eta_{i}}$ -> sensitive to the `Z`
 
 **Electron guns:**
 - Tungsten
