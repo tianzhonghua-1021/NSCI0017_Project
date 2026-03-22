@@ -1,7 +1,7 @@
 # NSCI0013 Revision
 ## OM (optical microscopy)
 **visible light range:** `380-780 nm`
-**resolution:** $R=\frac{0.61\lambda}{N_A},N_A=\mu sin\alpha$ ($\text{R}\downarrow \text{means resolution} \uparrow$)($N_A\uparrow,R\downarrow,D_{work}\downarrow$)
+**resolution:** $R=\frac{0.61\lambda}{N_A},N_A=\mu sin\alpha$ ($\text{R}\downarrow \text{means resolution} \uparrow$)($N_A\uparrow,R\downarrow,\text{but result in}~D_{work}\downarrow$)
 
 **Depth of field and depth of focus:** $D_f=\frac{1.22\lambda}{N_Atan\alpha}$ ($N_A\uparrow,D_f\downarrow,\text{but depth of focus}\uparrow$)
 
@@ -166,7 +166,7 @@ total resolution: $d_f=\sqrt{d_p^2+d_s^2+d_c^2+d_d^2}$
 - `projective lens`
   - final magnify
 - `detector`
-  - screen: phosphor screen
+  - flourescent screen: phosphor screen
   - CCD: $e^-$ -> screen -> $h\nu$ -> CCD
   - CMOS (FET arrays): $e^-$ -> CMOS
 - `vaccum system`
@@ -306,6 +306,7 @@ select primary ion -> change settings -> complete mass spectra
 
 
 ## XPS
+[Youtube video](https://youtu.be/jBd4xy7y4IU?si=Qwgf8S8G_-GcAfT_)
 **Principle:**
 incident light -> $e^-$ overcome BE (binding energy) -> arrive $E_F$ (Fermi energy level) -> overcome $\phi_{work function}$ -> emitted
 
@@ -329,3 +330,13 @@ the number of electrons in these orbitals can be calculated: `2j+1`, for $p^{\fr
 
 ****
 
+## Conclusion for each characterization methods with application
+- `SEM`: Surface details, fracture morphology or three-dimensional structure
+- `TEM`: To see the atomic-level details. Observe the lattice stripes, internal defects, the precise size of nanoparticles, and the electron diffraction of extremely thin samples.
+- `XRF`: Quickly and non-destructively determine which chemical elements are present in the material and their respective contents.
+- `XRD`: Crystal structure. Used to distinguish whether a material is crystalline or amorphous, and to identify different mineral phases or chemical phases.
+- `XPS`: The chemical information at the surface (10 nanometers) level, particularly the valence and oxidation states of the elements
+- `FTIR & Raman`: Chemical bonds, molecular structure or functional groups
+- `PL`: Electronic structure, especially for semiconductors and luminescent materials. Crystal quality and defects
+- `SIMS`: Extremely high sensitivity (at the ppb/ppm level) is required for detecting trace elements or isotopes. It is most suitable for conducting depth profiling analysis to observe the distribution of elements along the depth.
+- `UV-Vis`: Measure the concentration of the solution, the band gap of the solid, or the transparency/absorption characteristics of the coating
