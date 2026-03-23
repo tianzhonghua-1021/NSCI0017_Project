@@ -115,7 +115,11 @@ cuvettes`
 **Electron guns:**
 - Tungsten
 - Thermionic
-- field emmision (high current & small beam spot)
+- field emmision gun (FEG, high current & small beam spot)
+  - tiny source size -> small probe size -> high resolution
+  - `Temporal Coherency`: lower energy spread -> eletrons with same wavelength -> lower chromatic aberration
+  - `Spatial Coherency`: tiny source size -> high spatial coherency
+  - advantages compared with traditional electron gun: `FEG: small source size (nm); high brightness; high conherency; low energy spread`
 
 **Structures:**
 - `condensor lens`
@@ -123,6 +127,7 @@ cuvettes`
 - `Aperture`
 - `objective lens` (can with scanning coil)
   - focus the beam on a spot
+  - **The shortest WD generates beam with the smallest diameter and gives the poorest depth of field thus getting an image with the best resolution**
 - `speciman stage` (sample)
 - `detector`
   - `photon multiplier`
