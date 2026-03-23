@@ -135,6 +135,7 @@ cuvettes`
   - `faraday cage`
 - `vaccum system`
 
+
 **Resolution:**
 total resolution: $d_f=\sqrt{d_p^2+d_s^2+d_c^2+d_d^2}$
 - $d_p=(\frac{4i_p}{\beta\pi^2\alpha^2}),~ (i_p=\text{current})$ means the probe size, which is the most important->`controlled by (1) electron gun (2) probe current (3) accelerated voltage`
@@ -332,6 +333,26 @@ the number of electrons in these orbitals can be calculated: `2j+1`, for $p^{\fr
 ****
 
 ## XRD
+**Measure:** the angle $2\theta$
+**Bragg's equation:** $n\lambda=2dsin\theta$
+**Miller indices:**
+- plane (hkl) {family}
+- vector [hkl] \<family\>
+
+**Peak chracteristic:**
+- `samller` angle -> `larger` distance
+- `narrower` peak -> `larger` crystallite size
+- **Sherrer equation:** $D=\frac{K\lambda}{\beta cos\theta}$ and $Rad=\frac{degree\times \pi}{180}$
+- `intensity`:lower intensity -> less atoms present contributing to specific reflection -> detect (1) direction of growth/preferred orientation (2) point defects
+
+**SAXS and WAXS:**
+- smaller angle -> larger distance
+- SAXS can be used for `microstructure`
+- case: `SAXS->average shape` and `WAXS->crystall/atomic`
+
+**Neutron diffraction:**
+Neutron absorption is not tied to mass of elements in sample
+
 
 ****
 
@@ -345,3 +366,28 @@ the number of electrons in these orbitals can be calculated: `2j+1`, for $p^{\fr
 - `PL`: Electronic structure, especially for semiconductors and luminescent materials. Crystal quality and defects
 - `SIMS`: Extremely high sensitivity (at the ppb/ppm level) is required for detecting trace elements or isotopes. It is most suitable for conducting depth profiling analysis to observe the distribution of elements along the depth.
 - `UV-Vis`: Measure the concentration of the solution, the band gap of the solid, or the transparency/absorption characteristics of the coating
+
+
+## Key points of last year paper:
+*10 MCQ + 3-4 short answer/explanation + 1 bonus*
+1. **OM resolution**
+   $R=\frac{0.61\lambda}{N_A},~N_A=\mu sin\theta$
+2. **OM filter**
+   ND, color filter, heat filter
+3. **TEM/SEM voltage & d-spacing**
+   - `accelerating voltage`: high voltage -> low abberation -> small probe -> high resolution -> increase interaction volume -> but surface information vague -> low signal-noise-ratio -> sharp but coarse image
+   - `voltage range`: SEM 1-30kV; TEM 80-200kV
+4. **Beer-Lambert calculation**
+   $A=\epsilon b c$
+5. **SEM edges of spherical particles**
+   `more electron` escape (compared with flat surface) -> edges of spherical particles `brighter`
+6. **Vaccum system of SEM/TEM**
+   Rotary pump ($10^5-10^{-4} Pa$)
+   Diffusion pump ($10^0-10^{-8} Pa$)
+   Turbo pump ($10^{-2}-10^{-8} Pa$)
+   Ion getter pump (up to $10^{-9} Pa$, `final stage`)
+7. **Quantum dots type I & II**
+8. **XRD SAXS WAXS**
+   XRD use `coherent scattering (elastic)`
+9.  **selection of characterization methods for a certain condition**
+10. **Raman of graphene**
