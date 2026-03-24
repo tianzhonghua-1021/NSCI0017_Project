@@ -37,6 +37,7 @@ sectioning->mouting->grinding->polishing->etching
 **Beer-Lambert's Law:** $A=-log(T)=log(\frac{1}{T})=\epsilon c l$
 **Planck's equation:** $E=\frac{hc}{\lambda}$
 **Transition:** $\pi \to \pi^*$, $n \to \pi^*$, $n \to \sigma^*$
+**Integrating sphere:** measure overall or `diffuse reflectance` (transparent, translucent, and opaque solid or liquid samples)
 **Process:** 
 ```
 radiation source->(polychromatic light->entrance slit->dispersing device [prism/grating]->monochromatic light)->sample holder->detector
@@ -144,7 +145,7 @@ total resolution: $d_f=\sqrt{d_p^2+d_s^2+d_c^2+d_d^2}$
 - Astigmatism
 
 **Operation variables:**
-- `working distance & depth of field`: decrease aperture size and magnification; increase working distance.
+- `working distance (WD) & depth of field`: decrease aperture size and magnification, and increase WD -> increase the depth of field
 - `accelerated voltage & current`: low $i_p$ -> small probe size (high resolution); high accelerated voltage -> small probe size (high resolution)
 
 **Conductive coating:**
@@ -181,6 +182,7 @@ total resolution: $d_f=\sqrt{d_p^2+d_s^2+d_c^2+d_d^2}$
   - turbo pump
   - ion getter pump
   - *illumination (highest vaccum), sample holder (medium vaccum), data recording (lowest vaccum)*
+  - *$\text{Vaccum}_{TEM}>\text{Vaccum}_{SEM}$*
 
 **Types of TEM:**
 - `bright field (BF)`
@@ -248,8 +250,8 @@ select primary ion -> change settings -> complete mass spectra
 - time of flight (TOF): `lower mass` -> `higher velocity` -> `shorter time`
 
 **Modes:**
-- static SIMS: complete spectrum (low sputtering rate, low incident)
-- dynamic SIMS: depth profile for certain ion (high sputtering rate, high incident)
+- static SIMS: complete spectrum (low sputtering rate, low incident) -> surface -> `TOF`
+- dynamic SIMS: depth profile for certain ion (high sputtering rate, high incident) -> profile of depth -> `magnetic`
 - image SIMS: scan (like static)
 
 **Total sputter yield:**
