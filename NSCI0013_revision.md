@@ -76,6 +76,7 @@ cuvettes`
   - *uesd in the lab session*
 - `Diffuse Reflectance (DRIFT)`
 - Fingerprint area: `< 1500 cm-1`
+- Characteristic area: `1500-4000 cm-1`
 
 
 **Raman**
