@@ -75,7 +75,7 @@ cuvettes`
   - IR beam bounces through crystal interacting with the sample multiple times
   - *uesd in the lab session*
 - `Diffuse Reflectance (DRIFT)`
-- Fingerprint area: `1500-5000 cm-1`
+- Fingerprint area: `< 1500 cm-1`
 
 
 **Raman**
