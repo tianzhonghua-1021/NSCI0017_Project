@@ -42,5 +42,7 @@ For example, the explainer shows that Ti obtains the most important score in the
 ### Result and analysis
 **Importance of integrating T,P as features:** Compared with the result of `only graph` and `with (T,P`, the $R^2$ has been improved significantly from -0.086 to 0.883. That's because the $\theta$ is greatly dependent on tempreature and pressure. Hence, only the graph can not capture sufficient features of SWCNTs.
 *Note: in this case, each $\theta$ was created by frequency DFT calculation (with 7 temperature) and Langmuir equation (with 5 pressure).*
+
 **Efficiency of deepchem architecture:** According to the results between simple GNN and deepchem one, the deepchem architecture can capture more structural information to get better performance.
+
 **Influence of TDA descriptors:** Compared with deepchem GNN + TDA and deepchem GNN + only T,P, the result shows the enhancement made by TDA descriptors.
