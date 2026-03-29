@@ -13,8 +13,11 @@
 
 ### Result and analysis
 **Limition of dataset:** For model training without T and P, only 44 SWCNT structure can not be used for machine learning training.
+
 **Non-linear relationship:** Due to the poor performance of LR, it means that the relationship among $\theta$, $\Delta G$ and strutral features is non-linear.
+
 **High importance of P:** That indicates the models such as RF, XGBoost and SVR have the ability to capture non-linear relationship based on Langmuir Equation.
+
 **High importance of TDA_H0 and TDA_H1 series:** The TDA_H0 and TDA_H1 represent atomic distance (atom density in atomic scale) and rings, respectively. According to the SHAP analysis of RF, XGBoost and SVR, the density of carbon atoms and minimum size of rings have significant influence to the result. **Additionally, integrating TDA descriptors have obviously improved the prediction**
 ![fig](/Sum_ML_all/Random_Forest_shap_beeswarm.png)
 ![fig](/Sum_ML_all/SVR_shap_beeswarm.png)
