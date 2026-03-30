@@ -38,6 +38,10 @@
 #### GNNExplainer
 Need to be integrated and tested.
 #### Integrated Gradient
+*Reference:*
+- Blog (Chinese, need translator): http://home.ustc.edu.cn/~liujunyan/blog/Integrated-Gradients-IG/ 
+- Paper: https://arxiv.org/abs/1611.02639
+
 There are 44 molecular structures with coolwarm color extracted from IG explainer. The figures show that the deepchem GNN have the ability to understand different dopant or functional groups in the complex, according to the specific patterns with darker color.
 For example, the explainer shows that Ti obtains the most important score in the `Ti` doped SWCNT, and the atoms surrounding Ti have been influenced as well:
 ![fig](/GNN_without_TDA/test_set_ig_maps/atom_ig_20.png)
@@ -49,3 +53,15 @@ For example, the explainer shows that Ti obtains the most important score in the
 **Efficiency of deepchem architecture:** According to the results between simple GNN and deepchem one, the deepchem architecture can capture more structural information to get better performance.
 
 **Influence of TDA descriptors:** Compared with deepchem GNN + TDA and deepchem GNN + only T,P, the result shows the enhancement made by TDA descriptors.
+
+## Appendix
+Code files and dataset: `Zhonghua Tian ZH-1/Python codes/0330deepchem`
+
+Deepchem GNN (only graph): `dc_gnnv4_onlygraph.py`
+Deepchem GNN (with T,P): `dc_gnnv4_ig.py`
+Deepchem GNN (with T,P and TDA): `dc_gnnv3_tda.py`
+Simple GNN (onlygraph/with T,P): `s_gnn.py`
+Simple GNN (with TDA): `s_gnn_tda.py`
+1760 dataset: `dataset_form.csv`
+44 dataset: `dataset_form_noTP.csv`
+Environment: `requirement.txt`
