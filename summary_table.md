@@ -55,8 +55,12 @@ For example, the explainer shows that Ti obtains the most important score in the
 **Influence of TDA descriptors:** Compared with deepchem GNN + TDA and deepchem GNN + only T,P, the result shows the enhancement made by TDA descriptors.
 
 ## Appendix
+### MLs
+Code files and dataset: `Zhonghua Tian ZH-1/Python codes/0330MLs`
+For *all features* and *no TDA*: `MLs.py` + `dataset_full_feat.csv`
+For *no T,P* and *no T,P and TDA*: `MLs_noTP.py` + `dataset_full_feat_noTP.csv`
+### GNN
 Code files and dataset: `Zhonghua Tian ZH-1/Python codes/0330deepchem`
-
 Deepchem GNN (only graph): `dc_gnnv4_onlygraph.py`
 Deepchem GNN (with T,P): `dc_gnnv4_ig.py`
 Deepchem GNN (with T,P and TDA): `dc_gnnv3_tda.py`
