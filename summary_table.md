@@ -57,15 +57,26 @@ For example, the explainer shows that Ti obtains the most important score in the
 ## Appendix
 ### MLs
 Code files and dataset: `Zhonghua Tian ZH-1/Python codes/0330MLs`
+
 For *all features* and *no TDA*: `MLs.py` + `dataset_full_feat.csv`
+
 For *no T,P* and *no T,P and TDA*: `MLs_noTP.py` + `dataset_full_feat_noTP.csv`
+
 ### GNN
 Code files and dataset: `Zhonghua Tian ZH-1/Python codes/0330deepchem`
+
 Deepchem GNN (only graph): `dc_gnnv4_onlygraph.py`
+
 Deepchem GNN (with T,P): `dc_gnnv4_ig.py`
+
 Deepchem GNN (with T,P and TDA): `dc_gnnv3_tda.py`
+
 Simple GNN (onlygraph/with T,P): `s_gnn.py`
+
 Simple GNN (with TDA): `s_gnn_tda.py`
+
 1760 dataset: `dataset_form.csv`
+
 44 dataset: `dataset_form_noTP.csv`
+
 Environment: `requirement.txt`
