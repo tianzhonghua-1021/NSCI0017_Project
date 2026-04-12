@@ -11,6 +11,8 @@
 
 *For `All features, no (TDA)`, the dataset is `1760 data with T,P`; for `no (T,P), no (T,P) and (TDA)`, the dataset is `44 data without T,P`.*
 
+**Comment:** This table was created to compare 4 traditional ML models. 4 columns mean the different features. All features mean that the temperature, pressure and 15-bit persistent homology fingerprint. The temperature was used for frequency calculation on Gaussian, and the pressure was used for Langmuir Equation to get the coverage of adsorption. Initially, there are 44 SWCNT structures with different Ti-doped number and position, functional groups, chirality and length. To enhance the dataset, 8 temperature was integrated for frequency calculation to obtain the $\Delta G$ value, and 5 pressure was integrated for Langmuir Equation to obtain coverage of adsorption $\theta$, so the final dataset included $44 \times 8 \times 5 = 1760$ data. If the features didn't include T and P, the dataset containing of only 44 SWCNT was selected; if the features integrated the T and P, the full dataset was selected.
+
 ### Result and analysis
 **Limition of dataset:** For model training without T and P, only 44 SWCNT structure can not be used for machine learning training.
 
@@ -23,6 +25,9 @@
 ![fig](/Sum_ML_all/SVR_shap_beeswarm.png)
 ![fig](/Sum_ML_all/XGBoost_shap_beeswarm.png)
 
+### Conclusion
+- the full dataset with 1760 data is more reliable;
+- the TDA fingerprint has ability to imporve the performance for traditional ML models.
 
 ## Deepchem based GNN
 ### Summary Table ($R^2$)
@@ -34,6 +39,9 @@
 | deepchem GNN + Integrated Gradient | done | done | done |
 
 *For `Only graph`, the dataset contains of only 44 SWCNT structures; for `with (TDA) and (T,P)` and `with (T,P)`, the dataset contains of full 1760 datapoints*
+
+**Comment:** The simple GNN was selected as baseline, and the deepchem GNN was the core research target. Whatever the explainer had been selected, the main idea was to ensure the subgraph was created correctly, and finally the Integrated Gradient method could achieve. 
+
 ### Explainer (based on deepchem GNN)
 #### GNNExplainer
 Need to be integrated and tested.
@@ -80,3 +88,9 @@ Simple GNN (with TDA): `s_gnn_tda.py`
 44 dataset: `dataset_form_noTP.csv`
 
 Environment: `requirement.txt`
+
+### Conclusion
+- the deepchem GNN was more robust to deal with complex structure of SWCNT;
+- 44 SWCNT data wasn't suitbale for GNN due to its small size;
+- TDA had less improvement for GNN than traditional ML models, but it still enhanced the performance of GNN;
+- the subgraphs made by IG can confirm the graph had studied the important change of SWCNT structures.
