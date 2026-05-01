@@ -112,7 +112,7 @@ df = pd.read_csv(csv_dir)
 df.columns = df.columns.str.strip()
 
 # data (change for "with G" and "without G")
-X = df.drop(['G','E', 'theta','FileID', 'Temperature','Pressure'], axis=1)
+X = df.drop(['G','E', 'theta','FileID', 'TDA_H0_max', 'TDA_H0_min', 'TDA_H0_mean', 'TDA_H0_std', 'TDA_H0_sum', 'TDA_H1_max', 'TDA_H1_min', 'TDA_H1_mean', 'TDA_H1_std', 'TDA_H1_sum', 'TDA_H2_max', 'TDA_H2_min', 'TDA_H2_mean', 'TDA_H2_std', 'TDA_H2_sum'], axis=1)
 y = df['theta']
 
 # Pearson analysis
